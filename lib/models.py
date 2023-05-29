@@ -15,3 +15,18 @@ metadata = MetaData(naming_convention=convention)
 
 Base = declarative_base(metadata=metadata)
 
+class Flight(Base):
+    __tablename__ = 'flights'
+
+    id = Column(Integer(), primary_key = True)
+    departure_city = Column(String())
+    arrival_city = Column(String())
+    
+
+   
+    # planes = relationship('Plane', backref = 'route')
+    
+
+
+    def __repr__(self):
+        return(f'Flight number {self.id} is going from {self.departure_city} to {self.arrival_city}.')
