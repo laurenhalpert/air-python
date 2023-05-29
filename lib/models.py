@@ -15,6 +15,18 @@ metadata = MetaData(naming_convention=convention)
 
 Base = declarative_base(metadata=metadata)
 
+class Reservation(Base):
+    __tablename__= 'reservations'
+
+    id = Column(Integer(), primary_key = True)
+    reference_code = Column(String())
+    passenger_id = Column(ForeignKey('passengers.id'))
+    flight_id = Column(ForeignKey('flights.id'))
+
+    def __repr__(self):
+        return(f'Reservation {self.reference_code} was created.')
+
+
 class Flight(Base):
     __tablename__ = 'flights'
 
@@ -25,6 +37,9 @@ class Flight(Base):
     cost = Column(Integer())
 
     # planes = relationship('Plane', backref = 'flight')
+    reservations = relationship('Reservation', backref='flight')
+    passengers = association_proxy('reservations', 'passenger', creator=lambda px: Reservation(passenger=px))
+
     
     def __repr__(self):
         return(f'Flight number {self.id} is going from {self.departure_city} to {self.arrival_city} on a {self.plane_type}, and costs ${self.cost}.')
@@ -37,6 +52,8 @@ class Passenger(Base):
     age = Column(Integer())
     budget = Column(Integer())
     
+    reservations = relationship('Reservation', backref='passenger')
+    flights = association_proxy('reservations', 'flight', creator = lambda ft: Reservation(flight = ft))
 
     def __repr__(self):
         return f'Passenger: {self.name} Age: {self.age} Budget: ${self.budget}'
