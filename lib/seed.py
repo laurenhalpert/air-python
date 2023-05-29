@@ -31,17 +31,46 @@ arr_cities = [
 ]
 plane_types = ['737', '757', '787', 'A321']
 
+
+
 def create_records():
     flights = [
         Flight(
             departure_city=random.choice(dep_cities),
             arrival_city=random.choice(arr_cities),
+            plane_type=random.choice(plane_types),
+            cost = random.randint(49, 1500)
         ) for i in range(50)
     ]
+    # planes = [
+    #     Plane(
+    #         plane_type = random.choice(plane_types),
+    #         passenger_limit = random.randint(120, 300),
+    #         flight_id = random.randint(1,50)
+    #     ) for i in range(50)
+    # ]
+    # passengers =[
+    #     Passenger(
+    #         passenger_name = fake.unique.name(),
+    #         passenger_age = random.randint(15,90),
+    #         plane_id = random.randint(1, 50)
+    #     ) for i in range (3000)
+    # ]
     session.add_all(flights)
     session.commit()
     return flights
 
+# def relate_records(flights, planes, passengers):
+#     for plane in planes:
+#         plane.flight = rc(flights)
+
+#     for passenger in passengers:
+#         passenger.plane = rc(planes)
+
+#     session.add_all(planes + passengers)
+#     session.commit()
+
 if __name__ == '__main__':
     delete_records()
     flights = create_records()
+    # relate_records(flights, planes, passengers)
