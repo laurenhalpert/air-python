@@ -23,13 +23,20 @@ class Flight(Base):
     arrival_city = Column(String())
     plane_type = Column(String())
     cost = Column(Integer())
-    
 
-   
     # planes = relationship('Plane', backref = 'flight')
     
-
-
     def __repr__(self):
         return(f'Flight number {self.id} is going from {self.departure_city} to {self.arrival_city} on a {self.plane_type}, and costs ${self.cost}.')
 
+class Passenger(Base):
+    __tablename__ = 'passengers'
+
+    id = Column(Integer(), primary_key = True)
+    name = Column(String())
+    age = Column(Integer())
+    budget = Column(Integer())
+    
+
+    def __repr__(self):
+        return f'Passenger: {self.name} Age: {self.age} Budget: ${self.budget}'

@@ -5,7 +5,7 @@ from random import choice as rc
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from models import  Flight
+from models import  Flight, Passenger
 
 
 engine = create_engine('sqlite:///trip.db')
@@ -14,7 +14,7 @@ session = Session()
 
 def delete_records():
     session.query(Flight).delete()
-    # session.query(Passenger).delete()
+    session.query(Passenger).delete()
     # session.query(Plane).delete()
     session.commit()
 
@@ -49,16 +49,16 @@ def create_records():
     #         flight_id = random.randint(1,50)
     #     ) for i in range(50)
     # ]
-    # passengers =[
-    #     Passenger(
-    #         passenger_name = fake.unique.name(),
-    #         passenger_age = random.randint(15,90),
-    #         plane_id = random.randint(1, 50)
-    #     ) for i in range (3000)
-    # ]
-    session.add_all(flights)
+    passengers =[
+        Passenger(
+            name = fake.unique.name(),
+            age = random.randint(15,90),
+            budget = random.randint(50, 2000)
+        ) for i in range (3000)
+    ]
+    session.add_all(flights + passengers)
     session.commit()
-    return flights
+    return flights, passengers
 
 # def relate_records(flights, planes, passengers):
 #     for plane in planes:
@@ -72,5 +72,5 @@ def create_records():
 
 if __name__ == '__main__':
     delete_records()
-    flights = create_records()
+    flights, passengers = create_records()
     # relate_records(flights, planes, passengers)
