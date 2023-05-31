@@ -27,8 +27,8 @@ def show_menu():
     return menu
 
 def view_my_info(name):
-    my_info = session.query(Passenger).filter(Passenger.name.like(f'%{name}%')).all()
-    print( my_info[0])
+    my_info = session.query(Passenger).filter(Passenger.name.like(f'%{name}%')).first()
+    print( my_info)
     # option_to_edit = input('Would you like to edit your info? y/n: ')
     # return option_to_edit
 

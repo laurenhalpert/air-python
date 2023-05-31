@@ -42,6 +42,10 @@ if __name__ == '__main__':
         print(f'Welcome! We\'ve found your reservation: {retrieve_reservation(reference)}.')
         print('What actions would you like to take today?')
         menu = input('"view my info", "manage my flight", or "exit": ')
+        if menu == 'exit':
+            print('Thanks for visiting!')
+        elif menu == 'view my info':
+            view_my_info (retrieve_reservation(reference).passenger.name)
     # if retrieve_passenger_info(name):
     #     print(f'Hello, {name}.')
     #     print('What actions would you like to take today?')
