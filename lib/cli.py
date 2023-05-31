@@ -10,11 +10,9 @@ from sqlalchemy.orm import sessionmaker
 from models import Flight, Passenger, Reservation
 from helpers import (
     retrieve_reservation,
-    show_menu,
     view_my_info,
     edit_my_info,
-    update_my_info,
-    update_message
+    view_flight_info
 )
 
 engine = create_engine('sqlite:///trip.db')
@@ -23,6 +21,55 @@ session = Session()
 
 if __name__ == '__main__':
     # passenger_flights = []
+    def menu_loop():
+        print('What actions would you like to take today?')
+        menu = input('"view my info", "manage my flight", or "exit": ')
+        if menu == 'exit':
+            print('Thanks for visiting!')
+        elif menu == 'view my info':
+            print('Here is your info: ')
+            view_my_info (retrieve_reservation(reference).passenger.name)
+            edit_choice = input('Would you like to make any changes to your info? y/n : ')
+            if edit_choice == 'n':
+                menu_loop()
+            elif edit_choice == 'y':
+                edits = []
+                edits_name = input('Name : ')
+                edits.append(edits_name)
+                edits_age = input('Age : ')
+                edits.append(edits_age)
+                edits_budget = input('Budget : $')
+                edits.append(edits_budget)
+                print('Here is your updated info: ')
+                print(edit_my_info(retrieve_reservation(reference).passenger.name, edits))
+                menu_loop()
+        elif menu == 'manage my flight':
+            print('Here is your current flight information for your reservation: ')
+    
+            for flight in retrieve_reservation(reference).passenger.flights:
+                if flight.id == retrieve_reservation(reference).flight.id:
+                    print(flight)
+            change_flight = input('Would you like to make changes to your flight? y/n : ')
+            if change_flight == 'y':
+                change_or_cancel = input('What changes would you like to make? "change flight", "cancel flight", or "menu" : ')
+                if change_or_cancel == 'change flight':
+                    # user can search flights
+                    pass
+                elif change_or_cancel == 'cancel flight':
+                    pass
+                    # delete reservation 
+                    # update passenger.flights
+                elif change_or_cancel == 'menu':
+                    menu_loop()
+            elif change_flight == 'n':
+                menu_loop()
+
+
+
+
+
+
+
 
     reference = input('Please enter your reservation reference code: ')
     # while name:
@@ -40,12 +87,17 @@ if __name__ == '__main__':
             print('Okay! Please keep us in mind for your next travel plans.')
     else:
         print(f'Welcome! We\'ve found your reservation: {retrieve_reservation(reference)}.')
-        print('What actions would you like to take today?')
-        menu = input('"view my info", "manage my flight", or "exit": ')
-        if menu == 'exit':
-            print('Thanks for visiting!')
-        elif menu == 'view my info':
-            view_my_info (retrieve_reservation(reference).passenger.name)
+        # print('What actions would you like to take today?')
+        # menu = input('"view my info", "manage my flight", or "exit": ')
+        # if menu == 'exit':
+        #     print('Thanks for visiting!')
+        # elif menu == 'view my info':
+        #     print('Here is your info.')
+        #     view_my_info (retrieve_reservation(reference).passenger.name)
+        #     edit_choice = input('Would you like to make any changes to your info? y/n : ')
+        #     if edit_choice == 'n':
+        menu_loop()       
+
     # if retrieve_passenger_info(name):
     #     print(f'Hello, {name}.')
     #     print('What actions would you like to take today?')

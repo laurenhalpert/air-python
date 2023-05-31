@@ -21,10 +21,6 @@ def retrieve_reservation(input):
     reservation = session.query(Reservation).filter(Reservation.reference_code.like(f'%{ref_code}%')).first()
     return reservation
     
-def show_menu():
-    print('What actions would you like to take today?')
-    menu = input('"view my info", "view my flight info", "change my flight", "cancel my flight", or "exit": ')
-    return menu
 
 def view_my_info(name):
     my_info = session.query(Passenger).filter(Passenger.name.like(f'%{name}%')).first()
@@ -32,16 +28,21 @@ def view_my_info(name):
     # option_to_edit = input('Would you like to edit your info? y/n: ')
     # return option_to_edit
 
-def edit_my_info():
-    edit = input('Name, Age, Budget :')
-    return edit
+def edit_my_info(name, edits):
+    # session.query(Passenger).update({
+    #     Passenger.name: edits[0],
+    #     Passenger.age: edits[1],
+    #     Passenger.budget: edits[2]
+    # })
+    # updated_my_info = session.query(Passenger).filter(Passenger.name.like(f'%{edits[0]}%')).first()
+    # print(updated_my_info)
+    for passenger in session.query(Passenger).filter(Passenger.name.like(f'%{name}%')).all():
+        passenger.name = edits[0]
+        passenger.age = edits [1]
+        passenger.budget = edits [2]
+    session.commit()
 
-def update_my_info(personal_info):
-    # do something to update the db with the new personal_info
-    pass
+    return passenger
 
-def update_message():
-    print('Here is your updated info:')
-    view_my_info()
-    confirm_edited_info= input('Is this correct? y/n')
-    return confirm_edited_info
+def view_flight_info(flights):
+    print(flights[0].id)
