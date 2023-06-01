@@ -12,7 +12,8 @@ from helpers import (
     retrieve_reservation,
     view_my_info,
     edit_my_info,
-    view_flight_info
+    view_flight_info,
+    cancel_reservation
 )
 
 engine = create_engine('sqlite:///trip.db')
@@ -23,7 +24,7 @@ if __name__ == '__main__':
     # passenger_flights = []
     def menu_loop():
         print('What actions would you like to take today?')
-        menu = input('"view my info", "manage my flight", or "exit": ')
+        menu = input('"view my info", "manage my flight", "new reservation", or "exit": ')
         if menu == 'exit':
             print('Thanks for visiting!')
         elif menu == 'view my info':
@@ -54,11 +55,10 @@ if __name__ == '__main__':
                 change_or_cancel = input('What changes would you like to make? "change flight", "cancel flight", or "menu" : ')
                 if change_or_cancel == 'change flight':
                     # user can search flights
+                    # update reservation record
                     pass
                 elif change_or_cancel == 'cancel flight':
-                    pass
-                    # delete reservation 
-                    # update passenger.flights
+                    cancel_reservation(reference)
                 elif change_or_cancel == 'menu':
                     menu_loop()
             elif change_flight == 'n':

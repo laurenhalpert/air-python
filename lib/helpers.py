@@ -46,3 +46,9 @@ def edit_my_info(name, edits):
 
 def view_flight_info(flights):
     print(flights[0].id)
+
+def cancel_reservation(reference):
+    reservation = session.query(Reservation).filter(Reservation.reference_code.like(f'%{reference}%')).first()
+    session.delete(reservation)
+    session.commit()
+    
