@@ -15,16 +15,23 @@ engine = create_engine('sqlite:///trip.db')
 Session = sessionmaker(bind=engine)
 session = Session()
 
+reservation_dict = {}
+
 def retrieve_reservation(input):
     ref_code = text(input)
     
     reservation = session.query(Reservation).filter(Reservation.reference_code.like(f'%{ref_code}%')).first()
+
+    reservation_dict['reference_code'] = reservation.reference_code
+    reservation_dict['passenger'] = reservation.passenger
+    reservation_dict['flight'] = reservation.flight
     return reservation
     
 
 def view_my_info(name):
-    my_info = session.query(Passenger).filter(Passenger.name.like(f'%{name}%')).first()
-    print( my_info)
+    # my_info = session.query(Passenger).filter(Passenger.name.like(f'%{name}%')).first()
+    # print( my_info)
+    print(reservation_dict['passenger'])
     # option_to_edit = input('Would you like to edit your info? y/n: ')
     # return option_to_edit
 
