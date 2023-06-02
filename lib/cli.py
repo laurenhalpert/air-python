@@ -6,14 +6,16 @@
 # move to helpers.py
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
+from seed import dep_cities
 from models import Flight, Passenger, Reservation
 from helpers import (
     retrieve_reservation,
     view_my_info,
     edit_my_info,
     view_flight_info,
-    cancel_reservation
+    cancel_reservation,
+    fetch_flights,
+    book_flight
 )
 
 engine = create_engine('sqlite:///trip.db')
@@ -63,13 +65,32 @@ if __name__ == '__main__':
                     menu_loop()
             elif change_flight == 'n':
                 menu_loop()
+        elif menu == 'new reservation':
+            make_reservation()
+            # create a reservation record
 
+    
 
-
-
-
-
-
+    def make_reservation():
+        print('Let\'s get started!')
+        print(set(dep_cities))
+        choose_dep_city = input('Please choose a departure city from the list above: ')
+        fetch_flights(choose_dep_city)
+        print(f'Here are the flights from {choose_dep_city}: {fetch_flights(choose_dep_city)}')
+        choose_flight = input('Which of these flights would you like? Please enter the desired flight number. If none of these fit your needs, say "go back" to view flights from a different departure city, or say "menu". ')
+        if choose_flight == 'go back':
+            make_reservation()
+        elif choose_flight == 'menu':
+            menu_loop()
+        else:
+            passenger_name = input('Passenger name: ')
+            passenger_age = input('Passenger age: ')
+            passenger_budget = input('Passenger budget: $')
+            book_flight(choose_flight, passenger_name, passenger_age, passenger_budget)
+            print(f'You\'re booked! Here is your reference code: {book_flight(choose_flight, passenger_name, passenger_age, passenger_budget)}')
+            print(f'Here is your flight info: {session.query(Flight).filter_by(id= choose_flight).first()}')
+            print('Thanks for visiting!')
+            
 
     reference = input('Please enter your reservation reference code: ')
     # while name:
@@ -80,9 +101,14 @@ if __name__ == '__main__':
         print('Invalid reference code.')
         create_reservation = input('Would you like to make a flight reservation? y/n : ')
         if create_reservation == 'y':
-            print('Let\'s get started!')
-            print('Please enter the following details')
+            make_reservation()
+            # print('Let\'s get started!')
+            # print('Please enter the following details')
             # function to make a reservation
+            # choose from existing flight records
+            # flight must be in passenger's budget
+            # if new passenger, create new passenger record
+            # if current passenger, their flights and reservations should update
         else:
             print('Okay! Please keep us in mind for your next travel plans.')
     else:
