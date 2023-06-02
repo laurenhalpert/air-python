@@ -40,13 +40,13 @@ def create_records():
             arrival_city=random.choice(arr_cities),
             plane_type=random.choice(plane_types),
             cost = random.randint(49, 1500)
-        ) for i in range(50)
+        ) for i in range(300)
     ]
     reservations = [
         Reservation(
             reference_code = fake.unique.word(),
             passenger_id = random.randint(0, 500),
-            flight_id = random.randint(1,50)
+            flight_id = random.randint(1,301)
         ) for i in range(900)
     ]
     passengers =[
@@ -54,7 +54,7 @@ def create_records():
             name = fake.unique.name(),
             age = random.randint(15,90),
             budget = random.randint(50, 2000)
-        ) for i in range (500)
+        ) for i in range (800)
     ]
     session.add_all(flights + passengers + reservations)
     session.commit()
@@ -65,8 +65,7 @@ def relate_records(flights, passengers, reservations):
         reservation.flight = rc(flights)
         reservation.passenger = rc(passengers)
 
-    # for passenger in passengers:
-    #     passenger.plane = rc(planes)
+   
 
     session.add_all(flights + passengers + reservations)
     session.commit()

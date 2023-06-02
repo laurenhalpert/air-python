@@ -24,7 +24,7 @@ class Reservation(Base):
     flight_id = Column(ForeignKey('flights.id'))
 
     def __repr__(self):
-        return(f'Reservation {self.reference_code} was created.')
+        return(f'Reservation: {self.reference_code}')
 
 
 class Flight(Base):
@@ -36,7 +36,6 @@ class Flight(Base):
     plane_type = Column(String())
     cost = Column(Integer())
 
-    # planes = relationship('Plane', backref = 'flight')
     reservations = relationship('Reservation', backref='flight')
     passengers = association_proxy('reservations', 'passenger', creator=lambda px: Reservation(passenger=px))
 
