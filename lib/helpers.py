@@ -5,11 +5,6 @@ from faker import Faker
 
 from models import Flight, Passenger, Reservation
 
-# view my info
-# view my flight info
-# change my route
-# cancel my flight
-# transfer my flight to someone else
 
 
 engine = create_engine('sqlite:///trip.db')
@@ -32,20 +27,12 @@ def retrieve_reservation(input):
     
 
 def view_my_info(name):
-    # my_info = session.query(Passenger).filter(Passenger.name.like(f'%{name}%')).first()
-    # print( my_info)
+    
     print(reservation_dict['passenger'])
-    # option_to_edit = input('Would you like to edit your info? y/n: ')
-    # return option_to_edit
+    
 
 def edit_my_info(name, edits):
-    # session.query(Passenger).update({
-    #     Passenger.name: edits[0],
-    #     Passenger.age: edits[1],
-    #     Passenger.budget: edits[2]
-    # })
-    # updated_my_info = session.query(Passenger).filter(Passenger.name.like(f'%{edits[0]}%')).first()
-    # print(updated_my_info)
+    
     for passenger in session.query(Passenger).filter(Passenger.name.like(f'%{name}%')).all():
         passenger.name = edits[0]
         passenger.age = edits [1]
@@ -65,23 +52,35 @@ def cancel_reservation(reference):
 def fetch_flights(city):
     flights_with_city = session.query(Flight).filter(Flight.departure_city.like(f'%{city}%')).all()
     return flights_with_city
+
+
     
 def book_flight(flight_number, name, age, budget):
-    # create new Reservation record
-    # if passenger already exists, get id
+    
     passenger = session.query(Passenger).filter(Passenger.name.like(f'%{name}%')).first()
     if passenger:
-        # use passenger.id in reservation record
+        
         new_res = Reservation(reference_code=f'{fake.color()}', passenger_id=f'{passenger.id}', flight_id = f'{flight_number}')
         session.add(new_res)
         session.commit()
-        return new_res.reference_code
+        
+        return new_res
     else:
-        # create passenger record
+        
         new_passenger = Passenger(name=f'{name}', age = f'{age}', budget= f'{budget}')
         session.add(new_passenger)
         session.commit()
         new_res = Reservation(reference_code=f'{fake.color()}', passenger_id=f'{new_passenger.id}', flight_id = f'{flight_number}')
         session.add(new_res)
         session.commit()
-        return new_res.reference_code
+        
+        return new_res
+
+def change_flight(reference, flight_id):
+
+    for reservation in session.query(Reservation).filter(Reservation.reference_code.like(f'%{reference}%')).all():
+        reservation.flight_id = flight_id
+    session.commit()
+
+    return reservation
+
