@@ -1,1 +1,29 @@
-Generic single-database configuration.
+# Air Python
+
+This command line interface allows a passenger to look up their flight reservation, view their personal info, manage their flight, or book a new reservation. 
+
+
+## Usage
+
+-Start by running python cli.py
+
+-Enter your reservation reference code (if you have one)
+
+-if you don't have one, you will be given the option of booking a flight
+
+-If you do have one, you'll be given the option of viewing your personal info, managing your flight, or creating a new reservation
+
+-If you select 'view my info' you will be given the opportunity to edit your info
+
+-If you select 'manage my flight', you will be given your current flight info and the option to make changes (if you opt to make changes, you can choose to either change your flight or cancel your flight)
+
+-If you select 'new reservation', you will be prompted to choose a flight
+
+
+## GitHub URL
+
+https://github.com/laurenhalpert/air-python
+
+## Contributing
+
+Not open to contributions at this time.
