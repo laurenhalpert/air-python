@@ -1,5 +1,4 @@
-from sqlalchemy import create_engine, func, MetaData
-from sqlalchemy import ForeignKey, Table, Column, Integer, String
+from sqlalchemy import ForeignKey, Table, Column, Integer, String, create_engine
 from sqlalchemy.orm import relationship, backref, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.associationproxy import association_proxy
