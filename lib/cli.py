@@ -8,7 +8,6 @@ from helpers import (
     retrieve_reservation,
     view_my_info,
     edit_my_info,
-    view_flight_info,
     cancel_reservation,
     fetch_flights,
     book_flight,
