@@ -75,7 +75,7 @@ A user is asked if they'd like to change their flight, cancel their flight, or r
 
 If they change their flight, the change_reservation() function will be called, which executes similarly to the make_reservation() function except instead of creating a new reservation, we are updating the current reservation, so the reference_code and passenger_id will remain the same, but the flight_id will change. After changing their flight, the user will be thanked. 
 
-If they cancel their flight, the cancel_reservation() helper function will be called and the current reservation record will be deleted.
+If they cancel their flight, the cancel_reservation() helper function will be called and the current reservation record will be deleted. The user will receive a message notifying them that their flight reservation was canceled and will receive a goodbye message.
 
 If they opt to return to the menu, the menu_loop() function will be called and they will be brought back to the menu. 
 

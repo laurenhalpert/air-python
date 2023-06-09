@@ -66,6 +66,7 @@ if __name__ == '__main__':
                 elif change_or_cancel == 'cancel flight':
                     print('')
                     cancel_reservation(reference)
+                    print('Your flight reservation has been canceled. Goodbye!')
                 elif change_or_cancel == 'menu':
                     print('')
                     menu_loop()
@@ -83,6 +84,7 @@ if __name__ == '__main__':
         fetch_flights(choose_dep_city)
         print('')
         print(f'Here are the flights from {choose_dep_city}: {fetch_flights(choose_dep_city)}')
+        print('')
         choose_flight = input('Which of these flights would you like? Please enter the desired flight number. If none of these fit your needs, say "go back" to view flights from a different departure city, or say "menu". ')
         if choose_flight == 'go back':
             print('')
@@ -110,6 +112,7 @@ if __name__ == '__main__':
         fetch_flights(choose_dep_city)
         print('')
         print(f'Here are the flights from {choose_dep_city}: {fetch_flights(choose_dep_city)}')
+        print('')
         choose_flight = input('Which of these flights would you like? Please enter the desired flight number. If none of these fit your needs, say "go back" to view flights from a different departure city, or say "menu". ')
         if choose_flight == 'go back':
             print('')

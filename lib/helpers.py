@@ -33,7 +33,7 @@ def view_my_info(name):
 
 def edit_my_info(name, edits):
     
-    for passenger in session.query(Passenger).filter(Passenger.name.like(f'%{name}%')).all():
+    for passenger in session.query(Passenger).filter_by(name = name).all():
         passenger.name = edits[0]
         passenger.age = edits [1]
         passenger.budget = edits [2]
@@ -43,19 +43,20 @@ def edit_my_info(name, edits):
 
 
 def cancel_reservation(reference):
-    reservation = session.query(Reservation).filter(Reservation.reference_code.like(f'%{reference}%')).first()
+    reservation = session.query(Reservation).filter_by(reference_code= reference).first()
     session.delete(reservation)
     session.commit()
 
 def fetch_flights(city):
-    flights_with_city = session.query(Flight).filter(Flight.departure_city.like(f'%{city}%')).all()
+    flights_with_city = session.query(Flight).filter_by(departure_city = city).all()
     return flights_with_city
 
 
     
 def book_flight(flight_number, name, age, budget):
+    # something is wrong here...it's making 4 new reservations. It only makes one new passenger though if the passenger doesn't already exist.
     
-    passenger = session.query(Passenger).filter(Passenger.name.like(f'%{name}%')).first()
+    passenger = session.query(Passenger).filter_by(name = name).first()
     if passenger:
         
         new_res = Reservation(reference_code=f'{fake.color()}', passenger_id=f'{passenger.id}', flight_id = f'{flight_number}')
@@ -76,7 +77,7 @@ def book_flight(flight_number, name, age, budget):
 
 def change_flight(reference, flight_id):
 
-    for reservation in session.query(Reservation).filter(Reservation.reference_code.like(f'%{reference}%')).all():
+    for reservation in session.query(Reservation).filter_by(reference_code = reference).all():
         reservation.flight_id = flight_id
     session.commit()
 
