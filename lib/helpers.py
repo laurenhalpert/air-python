@@ -54,7 +54,7 @@ def fetch_flights(city):
 
     
 def book_flight(flight_number, name, age, budget):
-    # something is wrong here...it's making 4 new reservations. It only makes one new passenger though if the passenger doesn't already exist.
+    
     
     passenger = session.query(Passenger).filter_by(name = name).first()
     if passenger:
