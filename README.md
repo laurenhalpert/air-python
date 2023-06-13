@@ -1,238 +1,178 @@
-# Phase 3 CLI Project Template
+# Air Python
 
-## Learning Goals
+This command line interface allows a passenger to look up their flight reservation, view their personal info, manage their flight, or book a new reservation. 
 
-- Discuss the basic directory structure of a CLI.
-- Outline the first steps in building a CLI.
 
-***
+## Usage Overview
 
-## Introduction
+-Start by running python cli.py
 
-You now have a basic idea of what constitutes a CLI, but you (understandably!)
-likely don't have the best idea of where to start. Fork and clone this lesson
-for a template for your CLI. Take a look at the directory structure before we
-begin:
+-Enter your reservation reference code (if you have one)
 
-```console
-.
-├── Pipfile
-├── Pipfile.lock
-├── README.md
-└── lib
-    ├── cli.py
-    ├── db
-    │   ├── models.py
-    │   └── seed.py
-    ├── debug.py
-    └── helpers.py
-```
+-if you don't have one, you will be given the option of booking a flight
 
-> **Note: You may already know some or all of the material covered in this
-> lesson. We hope that having it all in one place will help you in designing
-> and developing your project, regardless of where you're starting off.**
+-If you do have one, you'll be given the option of viewing your personal info, managing your flight, or creating a new reservation
 
-***
+-If you select 'view my info' you will be given the opportunity to edit your info
 
-## Where Do I Start?
+-If you select 'manage my flight', you will be given your current flight info and the option to make changes (if you opt to make changes, you can choose to either change your flight or cancel your flight)
 
-This project will likely be one of the biggest projects you've undertaken so
-far. Your first task should be creating a Git repository to keep track of your
-work and roll back any undesired changes.
+-If you select 'new reservation', you will be prompted to choose a flight
 
-### Removing Existing Git Configuration
+## cli.py description
 
-If you're using this template, start off by removing the existing metadata for
-Github and Canvas. Run the following command to carry this out:
+The script begins by prompting the user to enter a reference code. Next, the retrieve_reservation helper function is called, passing in the user input as an argument. 
 
-```console
-$ rm -rf .git .canvas
-```
+### Reservation with the reference code the user input does not exist
 
-The `rm` command removes files from your computer's memory. The `-r` flag tells
-the console to remove _recursively_, which allows the command to remove
-directories and the files within them. `-f` removes them permanently.
+If a reservation with the reference code the user input does not exist, they will be asked if they want to make a reservation. If they want to make a new reservation, the make_reservation() function will be called and the user will then be prompted to make some choices about their desired flight, resulting in a reservation being created. The make_reservation() function calls on some other helper functions to help complete its task. 
 
-`.git` contains this directory's configuration to track changes and push to
-Github (you want to track and push _your own_ changes instead), and `.canvas`
-contains the metadata to create a Canvas page from your Git repo. You don't have
-the permissions to edit our Canvas course, so it's not worth keeping around.
+#### make_reservation()
 
-### Creating Your Own Git Repo
+The make_reservation() function prompts the user to choose a departure city from a set of departure cities. Their choice is then passed through the fetch_flights() helper function as an argument.
 
-First things first- rename this directory! Once you have an idea for a name,
-move one level up with `cd ..` and run `mv python-p3-cli-project-template
-<new-directory-name>` to change its name.
+The user is then prompted to choose a flight departing from the selected departure city, or they have the option to go back and choose a different departure city, or to return to the menu.
 
-> **Note: `mv` actually stands for "move", but your computer interprets this
-> rename as a move from a directory with the old name to a directory with
-> a new name.**
+##### user chose a flight
 
-`cd` back into your new directory and run `git init` to create a local git
-repository. Add all of your local files to version control with `git add --all`,
-then commit them with `git commit -m'initial commit`. (You can change the
-message here- this one is just a common choice.)
+The user will be prompted to enter their name, age, and budget. THe book_flight() helper function is then called with the chosen flight number, their name, age, and budget as arguments. The user is then shown their new reservation with its details and is thanked for visiting.
 
-Navigate to [GitHub](github.com). In the upper-right corner of the page, click
-on the "+" dropdown menu, then select "New repository". Enter the name of your
-local repo, choose whether you would like it to be public or private, make sure
-"Initialize this repository with a README" is unchecked (you already have one),
-then click "Create repository".
+##### user opted to go back
 
-Head back to the command line and enter `git remote add <project name> <github
-url>`. This will map the remote repository to your local repository. Finally,
-push your first commit with `git push -u origin main`.
+If a user opts to go back, the make_reservation() function is called and they are looped back to choosing a departure city.
 
-Your project is now version-controlled locally and online. This will allow you
-to create different versions of your project and pick up your work on a
-different machine if the need arises.
+##### user opted to go to the menu
 
-***
+The menu_loop() function will be called and the user will be brought to the menu.
 
-## Generating Your Pipenv
+### Reservation with the reference code the user input does exist
 
-You might have noticed in the file structure- there's already a Pipfile! That
-being said, we haven't put much in there- just Python version 3.8 and ipdb.
+If a reservation with the reference code the user input does exist, they will be prompted to select an option from the menu by calling on menu_loop(). The function menu_loop() was created so that a user can loop back to the menu and make other choices if they desire. 
 
-Install any dependencies you know you'll need for your project, like SQLAlchemy
-and Alembic, before you begin. You can do this straight from the command line:
+#### menu_loop()
 
-```console
-$ pipenv install sqlalchemy alembic
-```
+From the menu, a user can opt to view their info, manage their flight, create a new reservation, or exit.
 
-From here, you should run your second commit:
+##### user opted to view their info
 
-```console
-$ git add Pipfile Pipfile.lock
-$ git commit -m'add sqlalchemy and alembic to pipenv'
-$ git push
-```
+A user is shown their info thanks to the view_my_info() helper function. The user is then asked if they'd like to change their info.
 
-Now that your environment is set up, run `pipenv shell` to enter it.
+###### user opts to change their info
 
-***
+If a user opts to change their info, they will be prompted to enter their name, age, and budget, which then get appended to an edits list. The edits list gets passed in as an argument to the edit_my_info() function, where changes are made to that particular user's record in the passengers table. The user is then taken back to the menu via the menu_loop() function.
 
-## Generating Your Database
+###### user opts to keep their info the same
 
-Once you're in your environment, you can start development wherever you'd like.
-We think it's easiest to start with setting up your database.
+The user is taken back to the menu via the menu_loop() function.
 
-`cd` into the `lib/db` directory, then run `alembic init migrations` to set up
-Alembic. Modify line 58 in `alembic.ini` to point to the database you intend to
-create, then replace line 21 in `migrations/env.py` with the following:
+##### user opted to manage their flight
 
-```py
-from models import Base
-target_metadata = Base.metadata
-```
+A user is shown their current flight info and is then asked if they'd like to make any changes. 
 
-We haven't created our `Base` or any models just yet, but we know where they're
-going to be. Navigate to `models.py` and start creating those models. Remember
-to regularly run `alembic revision --autogenerate -m'<descriptive message>'` and
-`alembic upgrade head` to track your modifications to the database and create
-checkpoints in case you ever need to roll those modifications back.
+###### a user opts to make changes to their flight
 
-If you want to seed your database, now would be a great time to write out your
-`seed.py` script and run it to generate some test data. You may want to use
-Pipenv to install Faker to save you some time.
+A user is asked if they'd like to change their flight, cancel their flight, or return to the menu.
 
-***
+If they change their flight, the change_reservation() function will be called, which executes similarly to the make_reservation() function except instead of creating a new reservation, we are updating the current reservation, so the reference_code and passenger_id will remain the same, but the flight_id will change. After changing their flight, the user will be thanked. 
 
-## Generating Your CLI
+If they cancel their flight, the cancel_reservation() helper function will be called and the current reservation record will be deleted. The user will receive a message notifying them that their flight reservation was canceled and will receive a goodbye message.
 
-A CLI is, simply put, an interactive script. You can run it with `python cli.py`
-or include the shebang and make it executable with `chmod +x`. It will ask for
-input, do some work, and accomplish some sort of task by the end.
+If they opt to return to the menu, the menu_loop() function will be called and they will be brought back to the menu. 
 
-Past that, CLIs can be whatever you'd like. An inventory navigator? A checkout
-station for a restaurant? A choose-your-adventure video game? Absolutely!
+###### a user opts not to make changes to their flight
 
-Here's what all of these things have in common (if done well): a number of
-`import` statements (usually _a lot_ of import statements), an `if __name__ ==
-"__main__"` block, and a number of function calls inside of that block. These
-functions should be kept in other modules (ideally not _just_ `helpers.py`)
+The menu_loop() function is called and the user is brought back to the menu.
 
-There will likely be some `print()` statements in your CLI script to let the
-user know what's going on, but most of these can be placed in functions in
-other modules that are grouped with others that carry out similar tasks. You'll
-see some variable definitions, object initializations, and control flow
-operators (especially `if/else` blocks and `while` loops) as well. When your
-project is done, your `cli.py` file might look like this:
+##### a user opts to make a new reservation
 
-```py
-from helpers import (
-    function_1, function_2,
-    function_3, function_4,
-    function_5, function_6,
-    function_7, function_8,
-    function_9, function_10
-)
+The make_reservation() function is called. 
 
-if __name__ == '__main__':
-    print('Welcome to my CLI!')
-    function_1()
-    x = 0
-    while not x:
-        x = function_2(x)
-    if x < 0:
-        y = function_3(x)
-    else:
-        y = function_4(x)
-    z = function_5(y)
-    z = function_6(z)
-    z = function_7(z)
-    z = function_8(z)
-    function_9(z)
-    function_10(x, y, z)
-    print('Thanks for using my CLI')
+##### a user opts to exit
 
-```
+The user is thanked for visiting. 
 
-***
 
-## Updating Your README.md
+## helpers.py description
 
-`README.md` is a Markdown file that describes your project. These files can be
-used in many different ways- you may have noticed that we use them to generate
-entire Canvas lessons- but they're most commonly used as homepages for online
-Git repositories. **When you develop something that you want other people to
-use, you need to have a README.**
+The helper functions in helpers.py are there to make session.queries and create, update, read, or delete records from the database. 
 
-Markdown is not a language that we cover in Flatiron's Software Engineering
-curriculum, but it's not a particularly difficult language to learn (if you've
-ever left a comment on Reddit, you might already know the basics). Refer to the
-cheat sheet in this lesson's resources for a basic guide to Markdown.
+### retrieve_reservation()
 
-### What Goes into a README?
+Returns a reservation with the same reference_code that the user input if it exists; if it doesn't exist, it returns None. A side effect of this function is populating the reservation_dict with the reference_code, passenger, and flight. The reservation_dict is later used by other functions for ease of access to relevant data.
 
-This README should serve as a template for your own- go through the important
-files in your project and describe what they do. Each file that you edit
-(you can ignore your Alembic files) should get at least a paragraph. Each
-function should get a small blurb.
+### view_my_info()
 
-You should descibe your actual CLI script first, and with a good level of
-detail. The rest should be ordered by importance to the user. (Probably
-functions next, then models.)
+Prints the value of reservation_dict's passenger key.
 
-Screenshots and links to resources that you used throughout are also useful to
-users and collaborators, but a little more syntactically complicated. Only add
-these in if you're feeling comfortable with Markdown.
+### edit_my_info()
 
-***
+Updates the passenger's record with new data given by the user. Returns the new passenger record.
 
-## Conclusion
+###  cancel_reservation()
 
-A lot of work goes into a good CLI, but it all relies on concepts that you've
-practiced quite a bit by now. Hopefully this template and guide will get you
-off to a good start with your Phase 3 Project.
+The reservation record with the matching reference_code will be deleted from the database.
 
-Happy coding!
+### fetch_flights()
 
-***
+Returns flight records that depart from the given departure city. 
 
-## Resources
+### book_flight()
 
-- [Setting up a respository - Atlassian](https://www.atlassian.com/git/tutorials/setting-up-a-repository)
-- [Create a repo- GitHub Docs](https://docs.github.com/en/get-started/quickstart/create-a-repo)
-- [Markdown Cheat Sheet](https://www.markdownguide.org/cheat-sheet/)
+If a record for the passenger currently exists, a new reservation record will be created. The new reservation will be returned. 
+
+If a record for the passenger doesn't exist, a new passenger record and a new reservation record will be created. The new reservation will be returned.
+
+### change_flight()
+
+Updates the reservation record with the given reference_code to reflect the newly chosen flight. Returns the updated reservation.
+
+## models.py description
+
+### Reservation data model
+
+The Reservation data model is a join of the Flight data model and the Passenger data model. 
+The reservations table has columns for id, reference_code, passenger_id, and flight_id.
+
+The passenger_id and flight_id are both foreign keys. 
+
+### Flight data model
+
+The flights table has columns for id, departure_city, arrival_city, plane_type, and cost.
+
+The relationship() method is used to set up a relationship with reservations.
+The relationship with passengers is set up using an association_proxy, relating passengers to a flight via the reservations table.
+
+### Passenger data model
+
+The passengers table has columns for id, name, age, and budget.
+
+The relationship() method is used to set up a relationship with reservations.
+The relationship with flights is set up using an association_proxy, relating flights to a passenger via the reservations table.
+
+## seed.py description
+
+Seed.py has three functions: delete_records(), create_records(), and relate_records().
+
+### delete_records()
+
+Ensures that no duplicate records are made and that when python seed.py is run, old records are deleted.
+
+### create_records()
+
+Creates records in each table. 
+
+### relate_records()
+
+Sets up the relationships between tables. 
+
+## debug.py description
+
+Debug.py is executed by running python debug.py and uses ipdb to create a sandbox to test code in. 
+
+## GitHub URL
+
+https://github.com/laurenhalpert/air-python
+
+## Contributing
+
+Not open to contributions at this time.
